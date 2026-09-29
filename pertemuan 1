@@ -1,0 +1,163 @@
+## 1. Kesinambungan PWD–DPW–DPWL
+
+ Jika yang dimaksud adalah **PWD, DPW, dan DPWL dalam konteks pengembangan aplikasi**, ketiganya dapat dipahami sebagai tahapan/komponen yang saling berkesinambungan:
+
+ - **PWD**: tahap atau konsep dasar yang menjadi landasan pengembangan.
+- **DPW**: pengembangan aplikasi web yang menerapkan konsep tersebut ke dalam sebuah sistem.
+- **DPWL**: pengembangan lanjutan yang memperluas atau menyempurnakan aplikasi, misalnya melalui penerapan struktur yang lebih terorganisasi seperti MVC.
+
+ Kesinambungannya dapat digambarkan:
+
+ **PWD → DPW → DPWL → aplikasi yang semakin terstruktur dan mudah dikembangkan.**
+
+ Dengan demikian, materi sebelumnya tidak berdiri sendiri, tetapi menjadi dasar untuk memahami pengembangan aplikasi pada tahap berikutnya.
+
+ ## 2\. Perbedaan PHP Terstruktur dan MVC
+
+ | PHP Terstruktur | PHP MVC |
+| --- | --- |
+| Kode program biasanya berada dalam satu atau beberapa file yang langsung menjalankan proses | Kode dibagi menjadi **Model, View, dan Controller** |
+| Alur program cenderung langsung dari proses ke tampilan | Alur dipisahkan berdasarkan tanggung jawab |
+| Cocok untuk aplikasi sederhana | Lebih cocok untuk aplikasi yang lebih kompleks |
+| Pemeliharaan dapat menjadi sulit ketika aplikasi membesar | Lebih mudah dipelihara dan dikembangkan |
+| Logika, proses, dan tampilan dapat bercampur | Logika aplikasi dan tampilan dipisahkan |
+
+Contoh sederhana PHP terstruktur:
+
+```
+<?php
+$data = "Selamat Datang";
+
+echo "<h1>$data</h1>";
+?>
+```
+
+ Pada MVC, proses tersebut dapat dipisahkan sehingga **Controller** mengatur proses, **Model** mengelola data, dan **View** menampilkan hasil.
+
+ ## 3\. Fungsi Model, View, dan Controller
+
+ ### Model
+
+ Model bertugas menangani **data dan logika yang berhubungan dengan data**.
+
+ Contohnya:
+
+ - mengambil data dari database;
+- menyimpan data;
+- mengubah data;
+- menghapus data;
+- melakukan validasi atau pengolahan data tertentu.
+
+ ### View
+
+ View bertugas sebagai **tampilan yang dilihat pengguna**.
+
+ Contohnya:
+
+ - halaman dashboard;
+- tabel data;
+- form input;
+- tombol;
+- menu navigasi.
+
+ View sebaiknya berfokus pada bagaimana informasi ditampilkan, bukan bagaimana data diproses.
+
+ ### Controller
+
+ Controller menjadi **penghubung antara pengguna, Model, dan View**.
+
+ Contohnya:
+
+ 1. menerima request dari pengguna;
+2. menentukan proses yang harus dilakukan;
+3. memanggil Model jika membutuhkan data;
+4. mengirimkan data hasil proses ke View;
+5. menentukan halaman yang harus ditampilkan.
+
+ ## 4\. Alur Request–Response pada MVC
+
+ Alur sederhananya adalah:
+
+ **User → Request → Controller → Model → Controller → View → Response → User**
+
+ Contoh ketika pengguna membuka halaman daftar siswa:
+
+ 1. **User** meminta halaman daftar siswa.
+2. **Request** dikirim ke aplikasi.
+3. **Controller** menerima request tersebut.
+4. Controller meminta data siswa kepada **Model**.
+5. Model mengambil data dari database.
+6. Model mengembalikan data kepada Controller.
+7. Controller mengirim data tersebut kepada **View**.
+8. View menyusun data menjadi halaman HTML.
+9. HTML dikirim sebagai **response** kepada User.
+10. Browser menampilkan halaman daftar siswa.
+
+ Dengan demikian, Controller berperan sebagai pengatur alur, Model sebagai pengelola data, dan View sebagai penyaji data.
+
+ ## 5. Pemetaan Fitur Aplikasi DPW ke MVC
+
+ Misalnya pada aplikasi **DPW** terdapat fitur **data pengguna**.
+
+ ### Model — `UserModel`
+
+ Bagian Model menangani data pengguna, misalnya:
+
+```
+class UserModel {
+    public function getUsers() {
+        // mengambil data pengguna dari database
+    }
+}
+```
+
+ **Alasan:** pengambilan data dari database merupakan tanggung jawab Model.
+
+ ### Controller — `UserController`
+
+ Controller menangani permintaan untuk menampilkan data:
+
+```
+class UserController {
+    public function index() {
+        $model = new UserModel();
+        $users = $model->getUsers();
+
+        // mengirim data ke View
+    }
+}
+```
+
+ **Alasan:** Controller mengatur proses antara request pengguna, Model, dan View.
+
+ ### View — `users.php`
+
+ View menampilkan data pengguna:
+
+```
+<h1>Data Pengguna</h1>
+
+<?php foreach ($users as $user): ?>
+    <p><?= $user['nama']; ?></p>
+<?php endforeach; ?>
+```
+
+ **Alasan:** kode tersebut bertugas menyajikan data kepada pengguna.
+
+ Pemetaan fitur lainnya dapat dibuat seperti berikut:
+
+ | Fitur DPW | Model | Controller | View |
+| --- | --- | --- | --- |
+| Data pengguna | Mengelola data pengguna | Mengatur request pengguna | Menampilkan daftar pengguna |
+| Login | Memeriksa data akun | Memproses login | Menampilkan form login |
+| Tambah data | Menyimpan data ke database | Menerima dan memproses form | Menampilkan form tambah data |
+| Edit data | Mengubah data database | Mengatur proses perubahan | Menampilkan form edit |
+| Hapus data | Menghapus data | Memproses permintaan hapus | Tombol/halaman konfirmasi |
+
+Pembagian tersebut membuat setiap bagian memiliki **tanggung jawab yang jelas**, sehingga perubahan pada tampilan tidak harus mengubah proses database, dan perubahan pada database tidak harus mengubah seluruh tampilan.
+
+ ## 6\. Kesimpulan P1
+
+ **PWD, DPW, dan DPWL memiliki kesinambungan dalam proses pembelajaran dan pengembangan aplikasi web.** PHP terstruktur dapat digunakan untuk membangun aplikasi sederhana, tetapi ketika aplikasi semakin besar, pendekatan **MVC** membantu membagi kode menjadi Model, View, dan Controller.
+
+ Model berfokus pada **data**, View berfokus pada **tampilan**, sedangkan Controller mengatur **alur antara pengguna, Model, dan View**. Melalui pola request–response, ketiga komponen tersebut bekerja bersama untuk menghasilkan aplikasi yang lebih terstruktur, mudah dipelihara, dan lebih mudah dikembangkan.
